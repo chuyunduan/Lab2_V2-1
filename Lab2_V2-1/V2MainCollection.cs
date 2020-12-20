@@ -105,13 +105,13 @@ namespace Lab1_V2
                                                    from item in elem
                                                    select item;
 
-                IEnumerable<DataItem> grid = from elem in (from data in v2Datas
+                IEnumerable<DataItem> mag = from elem in (from data in v2Datas
                                                            where data is V2DataOnGrid
                                                            select (V2DataOnGrid)data)
                                              from item in elem
                                              select item;
 
-                IEnumerable<DataItem> items = collection.Union(grid);
+                IEnumerable<DataItem> items = collection.Union(mag);
 
                 return items.Average(n => n.Complex.Magnitude);
             }
@@ -129,13 +129,13 @@ namespace Lab1_V2
                                                    from item in elem
                                                    select item;
 
-                IEnumerable<DataItem> grid = from elem in (from data in v2Datas
+                IEnumerable<DataItem> mag= from elem in (from data in v2Datas
                                                            where data is V2DataOnGrid
                                                            select (V2DataOnGrid)data)
                                              from item in elem
                                              select item;
 
-                IEnumerable<DataItem> items = collection.Union(grid);
+                IEnumerable<DataItem> items = collection.Union(mag);
 
                 var dif = from item in items
                           select Math.Abs(item.Complex.Magnitude - a);

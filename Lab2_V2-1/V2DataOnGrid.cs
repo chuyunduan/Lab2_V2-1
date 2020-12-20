@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Numerics;
 using System.Collections;
+using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace Lab1_V2
 {
@@ -23,6 +25,18 @@ namespace Lab1_V2
 
         public V2DataOnGrid(string filename) : base()
         {
+
+            CultureInfo CI = new CultureInfo(System.Threading.Thread.CurrentThread.CurrentCulture.Name);
+            CultureInfo CIen = new CultureInfo("en-US");
+            CultureInfo CIru = new CultureInfo("ru-RU");
+            CultureInfo CIzh = new CultureInfo("zh-CN");
+
+            if ((CI == CIru) || (CI == CIzh))
+                if (CI == CIru)
+                    CI = CIru;
+                else
+                    CI = CIzh;
+
             FileStream f = null;
             try
             {
@@ -30,15 +44,15 @@ namespace Lab1_V2
                 StreamReader reader = new StreamReader(f);
 
                 Info = reader.ReadLine();//Info
-                Freq = double.Parse(reader.ReadLine());//Freq
+                Freq = double.Parse(reader.ReadLine(),CI);//Freq
                 string[] str;
                 Grids = new Grid1D[2];
 
                 for (int i = 0; i < 2; i++)
                 {
                     str = reader.ReadLine().Split(' ');//Count and Step
-                    Grids[i].Count = int.Parse(str[0]);
-                    Grids[i].Step = float.Parse(str[1]);
+                    Grids[i].Count = int.Parse(str[0],CI);
+                    Grids[i].Step = float.Parse(str[1],CI);
                 }
 
                 Node = new Complex[Grids[0].Count, Grids[1].Count];
@@ -50,8 +64,8 @@ namespace Lab1_V2
                     strnode = reader.ReadLine().Split(' ');
                     for (int j = 0; j < Grids[1].Count; j++)
                     {
-                        strcompl = strnode[j].Split(',');
-                        Node[i, j] = new Complex(double.Parse(strcompl[0]), double.Parse(strcompl[1]));
+                        strcompl = strnode[j].Split('|');
+                        Node[i, j] = new Complex(double.Parse(strcompl[0],CI), double.Parse(strcompl[1],CI));
                     }
                 }
             }
@@ -154,20 +168,18 @@ namespace Lab1_V2
             return $"Type: V2DataOnGrid Info: { Info } \nFreq: { Freq.ToString(format) } \nOx: { Grids[0].ToString(format) } \nOy: { Grids[1].ToString(format) } \n{ matrix }";
         }
 
-
         public IEnumerator<DataItem> GetEnumerator()
         {
             V2DataCollection ret = new V2DataCollection(Info, Freq);
-
             for (int i = 0; i < Grids[0].Count; i++)
             {
                 for (int j = 0; j < Grids[1].Count; j++)
-                    ret.dataItems.Add(new DataItem(new Vector2((i + 1) * Grids[0].Step,(j + 1) * Grids[1].Step), Node[i, j]));
+                    yield return new DataItem(new Vector2((i + 1) * Grids[0].Step, (j + 1) * Grids[1].Step), Node[i, j]);
             }
-            return ((IEnumerable<DataItem>)ret.dataItems).GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+
+    IEnumerator IEnumerable.GetEnumerator()
         {
             V2DataCollection ret = new V2DataCollection(Info, Freq);
 

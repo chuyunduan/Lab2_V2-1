@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace Lab1_V2
 {
@@ -15,7 +17,22 @@ namespace Lab1_V2
             //1
             try
             {
-                V2DataOnGrid grid = new V2DataOnGrid("infofile.txt");
+                /* Файл региона по умолчанию - 'def-infofile ', 
+                 * и можно автоматически выбрать'Russia'-'ru-RU'или 'China' - 'zh-CN'
+                 * в зависимости от версии хост - системы.
+                 */
+                V2DataOnGrid grid = new V2DataOnGrid($"..\\..\\..\\def-infofile.txt");
+
+                CultureInfo CI = new CultureInfo(System.Threading.Thread.CurrentThread.CurrentCulture.Name);
+                CultureInfo CIen = new CultureInfo("en-US");
+                CultureInfo CIru = new CultureInfo("ru-RU");
+                CultureInfo CIzh = new CultureInfo("zh-CN");
+
+                if ((CI == CIru) || (CI == CIzh))
+                    grid = new V2DataOnGrid($"..\\..\\..\\{CI}-infofile.txt");
+
+                Console.WriteLine($"Local OS version is : {System.Threading.Thread.CurrentThread.CurrentCulture.DisplayName} \nOpen info file is '{CI}-infofile.txt'");
+
                 Console.WriteLine(grid.ToLongString("n"));
             }
             catch (Exception ex)//4

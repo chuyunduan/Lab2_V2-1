@@ -36,6 +36,8 @@ namespace Lab1_V2
                     CI = CIru;
                 else
                     CI = CIzh;
+            else
+                CI = CIen;
 
             FileStream f = null;
             try

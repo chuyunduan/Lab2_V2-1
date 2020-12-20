@@ -54,8 +54,8 @@ namespace Lab1_V2
             {
                 mag[i].initRandom(0, 100);
                 collections[i].initRandom(4, 10, 10, 0, 100);
-                v2Datas.Add(mag[i]);
-                v2Datas.Add(collections[i]);
+                this.Add(mag[i]);
+                this.Add(collections[i]);
             }
 
             Grid1D NULLOX = new Grid1D(0, 0);
@@ -65,8 +65,8 @@ namespace Lab1_V2
 
             mag[3].initRandom(0, 10);
             collections[3].initRandom(0, 10, 10, 0, 10);
-            v2Datas.Add(mag[3]);
-            v2Datas.Add(collections[3]);
+            this.Add(mag[3]);
+            this.Add(collections[3]);
 
         }
 
